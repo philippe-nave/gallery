@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>Photo Gallery Mockup</title>
+<!-- dynamic array definition of thumbnail file names! -->
+<!--#include virtual="thumbarray.pl" -->
+</head>
+<body>
+
+
+<center><h3>Photo Gallery Mockup</h3></center>
+
+<p>
+You worked for a day to
+get CGI to work with Perl on Windows, remember? You have
+Perl installed in the C:\Strawberry directory.
+You have .pl working as CGI in local directories that
+are not tied to the outer-level cgi-bin directory! HUZZAH!
+</p>
+
+<p>
+SSI test - show today's date: 
+<!--#echo var="DATE_LOCAL" -->
+</p>
+
+<!-- define the 'log' helper function -->
+<!-- this just adds a list item to a named list on the page -->
+<script>
+   function log(txt, clazz) {
+      var li = document.createElement('li');
+      li.textContent = txt.toString();
+      if (clazz) li.className = clazz;
+         document.getElementById('log').appendChild(li);
+   }
+</script>
+
+
+<!-- commenting out the logging display
+
+<center><h3>Logging Area</h3></center>
+<ul id="log"></ul>
+<hr>
+
+<script>
+log("Listing thumbnails with toString() on the array:","heading");
+log(thumbnails.toString(), "heading");
+log("Listing thumbnails one at a time:","heading");
+for(i = 0; i < thumbnails.length; i++){
+  log(thumbnails[i], "heading");
+}
+</script>
+
+end of commenting out logging display -->
+
+<hr>
+
+<center><h3>Dynamic table modification</h3></center>
+<p>
+Now, we're going to try to generate the contents of a 
+thumbnail strip as a table that is dynamically populated.
+Let's start by just trying to fill in the thumbnail file
+names and then work from there. The table rows only have
+one cell, so this is a bit one-dimensional.
+</p>
+<p>
+Trying to make the thumbnail strip scroll up and down..
+tried &lt;div class=scrollable&gt; &lt;div&gt; inside
+the &lt;td&gt; definition with no luck.
+</p>
+<table id="outertable" border=1>
+<tr><td>
+   <table id="thumbtable" border=1>
+   </table>
+</td>
+<td id="bigpicture">
+</td></tr>
+</table> <!-- end of outertable definition -->
+
+<script>
+   var table = document.getElementById('thumbtable');
+   // iterate through list of thumbnail file names
+   for (i = 0; i < thumbnails.length; i++) {
+      var rowCount = table.rows.length;     // will increment as rows are added
+      var row = table.insertRow(rowCount);  // our new row is added and identified
+      var cell = row.insertCell(0);         // our new cell (only one on the row)
+      // cell.innerHTML=thumbnails[i];         //populate the new cell
+      var cellhtml = '<img src="thumbnails/' + thumbnails[i] +
+		   '" onclick="displayImage(\'' + thumbnails[i] + '\')">'; 
+      cell.innerHTML = cellhtml;
+      cell.align = 'center';
+   } // done iterating through thumbnail file names
+
+   function displayImage(picture) {
+      var picturecell = document.getElementById('bigpicture');
+	   var picHTML = '<img width="100%" height="100%" src="images/' + picture + '">';
+      picturecell.innerHTML = picHTML;
+   }
+</script>
+
+</body>
+</html>
